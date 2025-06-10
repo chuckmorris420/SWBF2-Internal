@@ -159,8 +159,7 @@ namespace Renderer
 						RenderRect(ImVec2(m2.x -2, m2.y + ((m3.y - m2.y) * (1 - perc))), ImVec2(m3.x + thicc / 2, m3.y), HealthColor, 0, 0, thicc);*/
 
 						RenderLine(ImVec2(m2.x - thicc, m2.y), ImVec2(m3.x - thicc, m3.y), blackColor, thicc - 2);
-						float x = (m2.x + m3.x) / 2 - thicc; // or just use one fixed x, like m2.x
-						RenderLine(ImVec2(x, m2.y + ((m3.y - m2.y) * (1 - perc))), ImVec2(x, m3.y), HealthColor, thicc - 2);
+						RenderLine(ImVec2(m2.x - thicc, m2.y + ((m3.y - m2.y) * (1 - perc))), ImVec2(m3.x - thicc, m3.y), HealthColor, thicc - 2);
 					}
 
 					if (pPlayer->team != pLocalPlayer->team && settings::ESP::dot)
