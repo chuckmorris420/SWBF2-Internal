@@ -17,7 +17,7 @@ Recommend disabling origin in-game overlay as it can cause input lag:
 - Name
 - Health Bar (Colour based)
 - Hero Flagging
-- Enforcer/Ariel Flagging
+- Ariel/Enforcer/Infiltrator Flagging
 - Screenshot Cleaner (With notification when taken)
 
 ## Screenshots:
