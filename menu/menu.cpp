@@ -58,7 +58,8 @@ namespace menu {
 		style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
 		style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 0.00f, 1.00f, 0.35f);
 		style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
-		//Accent colors
+
+		//Accent colours
 		style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.7f, 0.07f, 0.07f, 1.00f);
 		style.Colors[ImGuiCol_CheckMark] = ImVec4(0.7f, 0.07f, 0.07f, 1.00f);
 		style.Colors[ImGuiCol_Tab] = ImVec4(0.5f, 0.02f, 0.02f, 1.00f);
@@ -90,10 +91,6 @@ namespace menu {
 				{
 					ImGui::Checkbox("Enable ESP", &settings::ESP::enabled);
 					ImGui::Checkbox("Enemy Box", &settings::ESP::enemy);
-					ImGui::SameLine();
-					ImGui::ColorEdit4("Occluded", (float*)&settings::ESP::enemyOccludedColor, ImGuiColorEditFlags_NoInputs);
-					ImGui::SameLine();
-					ImGui::ColorEdit4("Visible", (float*)&settings::ESP::enemyVisibleColor, ImGuiColorEditFlags_NoInputs);
 					ImGui::Checkbox("Enemy Name", &settings::ESP::name);
 					ImGui::Checkbox("Enemy Health", &settings::ESP::health);
 					//ImGui::Checkbox("Show Distance", &Config::ESP::distance);
@@ -102,6 +99,18 @@ namespace menu {
 					ImGui::Checkbox("Flag Ariel/Enforcer/Infiltrator", &settings::ESP::extraUnitCheck);
 					ImGui::Checkbox("Fairfight Screenshot Notification", &settings::ESP::fairfightScreenshot);
 					ImGui::TreePop();
+				}
+				if (ImGui::BeginTabItem("Colours"))
+				{
+					ImGui::Text("Basic Enemy:");
+					ImGui::ColorEdit4("Visible", (float*)&settings::ESP::enemyVisibleColor, ImGuiColorEditFlags_NoInputs);
+					ImGui::SameLine();
+					ImGui::ColorEdit4("Occluded", (float*)&settings::ESP::enemyOccludedColor, ImGuiColorEditFlags_NoInputs);
+					
+					ImGui::Text("Hero/Villian:");
+
+
+					ImGui::EndTabItem();
 				}
 				if (ImGui::BeginTabItem("Config"))
 				{

@@ -7,8 +7,6 @@ namespace cfg
         const char* appData = std::getenv("APPDATA");
         if (appData && appData[0] != '\0')
             return std::string(appData) + "\\KeefSWBF2";
-        // Fallback to current directory if APPDATA is not set
-        return std::string("KeefSWBF2");
     }();
 
     std::vector<std::string> list;
@@ -97,6 +95,9 @@ namespace cfg
             try_val(j, "ESP_heroCheck", settings::ESP::heroCheck);
             try_val(j, "ESP_fairfightScreenshot", settings::ESP::fairfightScreenshot);
 
+            try_color(j, "ESP_enemyVisibleColor", settings::ESP::enemyVisibleColor);
+            try_color(j, "ESP_enemyOccludedColor", settings::ESP::enemyOccludedColor);
+
             cfg::refresh();
         } catch (const std::exception& e) {
             printf("Exception in load: %s\n", e.what());
@@ -122,7 +123,19 @@ namespace cfg
             {"ESP_dot", settings::ESP::dot},
             {"ESP_extraUnitCheck", settings::ESP::extraUnitCheck},
             {"ESP_heroCheck", settings::ESP::heroCheck},
-            {"ESP_fairfightScreenshot", settings::ESP::fairfightScreenshot}
+            {"ESP_fairfightScreenshot", settings::ESP::fairfightScreenshot},
+            {"ESP_enemyVisibleColor", {
+                (int)(settings::ESP::enemyVisibleColor.Value.x * 255.0f),
+                (int)(settings::ESP::enemyVisibleColor.Value.y * 255.0f),
+                (int)(settings::ESP::enemyVisibleColor.Value.z * 255.0f),
+                (int)(settings::ESP::enemyVisibleColor.Value.w * 255.0f)
+            }},
+            {"ESP_enemyOccludedColor", {
+                (int)(settings::ESP::enemyOccludedColor.Value.x * 255.0f),
+                (int)(settings::ESP::enemyOccludedColor.Value.y * 255.0f),
+                (int)(settings::ESP::enemyOccludedColor.Value.z * 255.0f),
+                (int)(settings::ESP::enemyOccludedColor.Value.w * 255.0f)
+            }}
         };
 
         try {
