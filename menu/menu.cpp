@@ -4,6 +4,7 @@ namespace menu {
 
 	bool isOpen = true;
 	float test = 0.f;
+	
 
 	void init() {
 		static bool no_titlebar = false;
@@ -87,20 +88,72 @@ namespace menu {
 			{
 				if (ImGui::BeginTabItem("Visuals"))
 				{
-					ImGui::Checkbox("Enable ESP", &Config::ESP::enabled);
-					ImGui::Checkbox("Enemy Box", &Config::ESP::enemy);
-					ImGui::Checkbox("Enemy Name", &Config::ESP::name);
-					ImGui::Checkbox("Enemy Health", &Config::ESP::health);
+					ImGui::Checkbox("Enable ESP", &settings::ESP::enabled);
+					ImGui::Checkbox("Enemy Box", &settings::ESP::enemy);
+					ImGui::SameLine();
+					ImGui::ColorEdit4("Occluded", (float*)&settings::ESP::enemyOccludedColor, ImGuiColorEditFlags_NoInputs);
+					ImGui::SameLine();
+					ImGui::ColorEdit4("Visible", (float*)&settings::ESP::enemyVisibleColor, ImGuiColorEditFlags_NoInputs);
+					ImGui::Checkbox("Enemy Name", &settings::ESP::name);
+					ImGui::Checkbox("Enemy Health", &settings::ESP::health);
 					//ImGui::Checkbox("Show Distance", &Config::ESP::distance);
-					ImGui::Checkbox("Enemy Dot", &Config::ESP::dot);
-					ImGui::Checkbox("Flag Hero/Villian", &Config::ESP::heroCheck);
-					ImGui::Checkbox("Flag Ariel/Enforcer/Infiltrator", &Config::ESP::extraUnitCheck);
+					ImGui::Checkbox("Enemy Dot", &settings::ESP::dot);
+					ImGui::Checkbox("Flag Hero/Villian", &settings::ESP::heroCheck);
+					ImGui::Checkbox("Flag Ariel/Enforcer/Infiltrator", &settings::ESP::extraUnitCheck);
+					ImGui::Checkbox("Fairfight Screenshot Notification", &settings::ESP::fairfightScreenshot);
 					ImGui::TreePop();
 				}
 				if (ImGui::BeginTabItem("Config"))
 				{
-					ImGui::Text("Config options will be here soon.");
-					ImGui::TreePop();
+					static char buffer[64]{};
+
+					auto size = cfg::list.size();
+					for (int i = 0; i < size; i++)
+					{
+						auto config_name = cfg::list[i];
+						bool selected = (i == cfg::currCfg);
+
+						if (ImGui::Selectable(config_name.c_str(), &selected))
+							cfg::currCfg = i;
+
+						if (selected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
+					ImGui::InputTextWithHint("##input)text", "Config Name", buffer, sizeof(buffer));
+					ImGui::PopItemWidth();
+
+					if (ImGui::Button("Load", ImVec2(ImGui::GetContentRegionAvail().x / 4, 24.0f)))
+					{
+						if (strlen(buffer) > 1)
+							cfg::load(buffer);
+						else
+							cfg::load(cfg::list[cfg::currCfg]);
+					}
+					ImGui::SameLine(0, 1);
+					if (ImGui::Button("Save", ImVec2(ImGui::GetContentRegionAvail().x / 3, 24.0f)))
+					{
+						if (strlen(buffer) > 1)
+							cfg::save(buffer);
+						else
+							cfg::save(cfg::list[cfg::currCfg]);
+					}
+					ImGui::SameLine(0, 1);
+					if (ImGui::Button("Delete", ImVec2(ImGui::GetContentRegionAvail().x / 2, 24.0f)))
+					{
+						if (strlen(buffer) > 1)
+							cfg::remove(buffer);
+						else
+							cfg::remove(cfg::list[cfg::currCfg]);
+					}
+					ImGui::SameLine(0, 1);
+					if (ImGui::Button("Refresh", ImVec2(ImGui::GetContentRegionAvail().x / 1, 24.0f)))
+					{
+						cfg::refresh();
+					}
+
+					ImGui::EndTabItem();
 				}
 			}
 			

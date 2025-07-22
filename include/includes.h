@@ -17,17 +17,24 @@
 #include "imgui_impl_dx11.h"
 
 #include "classes.h"
+#include <nlohmann/json.hpp>
+#include <fstream>
 
 #include "hooks.h"
 #include "D3dx9math.h"
 #include "d3d11/d3d11_impl.h"
 #include <d2d1.h>
 #include "input.h"
+#include "renderer.h"
+#include <string>
+#include <vector>
+#include <filesystem>
+#include <array>
 
-#include "globals.h"
 #include "settings.h"
 #include "utils.h"
 #include "Renderer.h"
+#include "globals.h"
 
 #include "menu/menu.h"
 

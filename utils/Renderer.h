@@ -21,4 +21,14 @@ namespace Renderer
 	void DrawLine(float x1, float y1, float x2, float y2, float thicc, float r, float g, float b);
 }
 
+// Declare the ImColorToU32 function
+inline uint32_t ImColorToU32(const ImColor& color)
+{
+    int r = int(color.Value.x * 255.0f);
+    int g = int(color.Value.y * 255.0f);
+    int b = int(color.Value.z * 255.0f);
+    int a = int(color.Value.w * 255.0f);
+    return (a << 24) | (r << 16) | (g << 8) | b;
+}
+
 

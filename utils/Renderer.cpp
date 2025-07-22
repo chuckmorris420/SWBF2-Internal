@@ -87,7 +87,12 @@ namespace Renderer
 				}
 				else
 				{
-					pSoldier->occluded ? Chosencolor = &redColor : Chosencolor = &greenColor;
+					uint32_t occludedColor = ImColorToU32(settings::ESP::enemyOccludedColor);
+					uint32_t visibleColor = ImColorToU32(settings::ESP::enemyVisibleColor);
+
+					pSoldier->occluded
+						? Chosencolor = &occludedColor
+						: Chosencolor = &visibleColor;
 				}
 			}
 
@@ -174,12 +179,12 @@ namespace Renderer
 		}
 
 		// Show screenshot notice if needed
-        if (globals::showScreenshotNotice && globals::canDraw) {
+        if (globals::showScreenshotNotice && globals::canDraw && settings::ESP::fairfightScreenshot) {
             RenderText("Screenshot taken by FairFight", ImVec2(5, 5), 20.0f, 0xffffff00, false);
 
 			// Remove after time has passed
             auto now = std::chrono::steady_clock::now();
-            if (std::chrono::duration_cast<std::chrono::seconds>(now - globals::lastScreenshotTime).count() >= 30) {
+            if (std::chrono::duration_cast<std::chrono::seconds>(now - globals::lastScreenshotTime).count() >= 20) {
                 globals::showScreenshotNotice = false;
             }
         }
@@ -324,7 +329,7 @@ namespace Renderer
 		window->DrawList->AddImageRounded(pTexture, from, to, { 0.0f, 0.0f }, { 1.0f, 1.0f }, ImGui::GetColorU32({ r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f }), rounding, roundingCornersFlags);
 	}
 	
-	
+
 
 }
 

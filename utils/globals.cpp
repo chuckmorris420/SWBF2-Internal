@@ -5,7 +5,7 @@ namespace globals {
 	HMODULE mainModule;
 	HWND mainWindow;
 	int uninjectKey = VK_F12;
-	int openMenuKey = VK_BACK;
+	int openMenuKey = VK_OEM_PLUS;
 	RECT wRect;
 	bool canDraw = true;
 	bool showScreenshotNotice = false;

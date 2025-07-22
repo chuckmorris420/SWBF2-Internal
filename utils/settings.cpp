@@ -1,20 +1,171 @@
 #include "includes.h"
 
-namespace settings 
+namespace cfg
 {
-	namespace ESP 
-	{
-		bool enabled = true;
-		bool enemy = true;
-		bool name = true;
-		bool health = true;
-		bool dot = false;
-		bool extraUnitCheck = true;
-	}
-	namespace DAMAGE
-	{
-		bool enabled = false;
-		int value = 0;
+    // Use %APPDATA%\KeefSWBF2 for config storage, with safe fallback
+    std::string path = []() {
+        const char* appData = std::getenv("APPDATA");
+        if (appData && appData[0] != '\0')
+            return std::string(appData) + "\\KeefSWBF2";
+        // Fallback to current directory if APPDATA is not set
+        return std::string("KeefSWBF2");
+    }();
 
-	}
+    std::vector<std::string> list;
+    int currCfg = 0;
+
+    template<typename Type>
+    void try_val(nlohmann::ordered_json& j, std::string name, Type& _value)
+    {
+        if (name.empty())
+            return;
+        if (j.dump().find(name) == std::string::npos)
+            return;
+        j.at(name).get_to(_value);
+    }
+
+    void try_color(nlohmann::ordered_json& j, const std::string& name, ImColor& color)
+    {
+        if (j.contains(name) && j[name].is_array() && j[name].size() == 4)
+        {
+            color = ImColor(j[name][0].get<int>(), j[name][1].get<int>(), j[name][2].get<int>(), j[name][3].get<int>());
+        }
+    }
+
+    bool refresh()
+    {
+        try {
+            printf("Config directory path: %s\n", path.c_str());
+            if (!std::filesystem::exists(path))
+                std::filesystem::create_directories(path);
+
+            list.clear();
+            currCfg = 0;
+
+            for (auto& file : std::filesystem::directory_iterator(path))
+            {
+                std::string file_name = file.path().filename().string();
+
+                if (size_t location = file_name.find(".json"); location != std::string::npos)
+                    file_name.replace(file_name.begin() + location, file_name.end(), "");
+
+                if (!file_name.empty())
+                    list.push_back(file_name);
+
+                printf("%s\n", file_name.c_str());
+            }
+
+            // Force creation of Default.json if it doesn't exist
+            std::string default_cfg_path = path + "\\Default.json";
+            if (!std::filesystem::exists(default_cfg_path)) {
+                printf("Default.json not found, creating...\n");
+                save("Default");
+            }
+        } catch (const std::exception& e) {
+            printf("Exception in refresh: %s\n", e.what());
+            return false;
+        }
+        return true;
+    }
+
+    bool load(const std::string& name)
+    {
+        if (name.empty())
+            return false;
+
+        auto _path = std::string(path) + "\\" + name + ".json";
+
+        try {
+            if (!std::filesystem::exists(_path))
+                return false;
+
+            std::ifstream read_stream(_path);
+            if (!read_stream.is_open())
+                return false;
+
+            nlohmann::ordered_json j;
+            read_stream >> j;
+            read_stream.close();
+
+            // ESP Settings
+            try_val(j, "ESP_enabled", settings::ESP::enabled);
+            try_val(j, "ESP_enemy", settings::ESP::enemy);
+            try_val(j, "ESP_name", settings::ESP::name);
+            try_val(j, "ESP_health", settings::ESP::health);
+            try_val(j, "ESP_dot", settings::ESP::dot);
+            try_val(j, "ESP_extraUnitCheck", settings::ESP::extraUnitCheck);
+            try_val(j, "ESP_heroCheck", settings::ESP::heroCheck);
+            try_val(j, "ESP_fairfightScreenshot", settings::ESP::fairfightScreenshot);
+
+            cfg::refresh();
+        } catch (const std::exception& e) {
+            printf("Exception in load: %s\n", e.what());
+            return false;
+        }
+
+        return true;
+    }
+
+    bool save(std::string name)
+    {
+        if (name.empty())
+            return false;
+
+        auto _path = std::string(path) + "\\" + name + ".json";
+
+        nlohmann::ordered_json j = nlohmann::ordered_json
+        {
+            {"ESP_enabled", settings::ESP::enabled},
+            {"ESP_enemy", settings::ESP::enemy},
+            {"ESP_name", settings::ESP::name},
+            {"ESP_health", settings::ESP::health},
+            {"ESP_dot", settings::ESP::dot},
+            {"ESP_extraUnitCheck", settings::ESP::extraUnitCheck},
+            {"ESP_heroCheck", settings::ESP::heroCheck},
+            {"ESP_fairfightScreenshot", settings::ESP::fairfightScreenshot}
+        };
+
+        try {
+            printf("Config directory path: %s\n", path.c_str());
+            if (!std::filesystem::exists(path))
+                std::filesystem::create_directories(path);
+
+            std::ofstream output(_path);
+            if (!output.is_open()) {
+                printf("Failed to open file for writing: %s\n", _path.c_str());
+                return false;
+            }
+            output << j.dump(4);
+            output.close();
+
+            if (!std::filesystem::exists(_path))
+                return false;
+        } catch (const std::exception& e) {
+            printf("Exception in save: %s\n", e.what());
+            return false;
+        }
+
+        return true;
+    }
+
+    bool remove(std::string name)
+    {
+        if (name.empty())
+            return false;
+
+        auto _path = std::string(path) + "\\" + name + ".json";
+
+        try {
+            if (!std::filesystem::exists(_path))
+                return false;
+
+            std::filesystem::remove(_path);
+            cfg::refresh();
+        } catch (const std::exception& e) {
+            printf("Exception in remove: %s\n", e.what());
+            return false;
+        }
+
+        return true;
+    }
 }

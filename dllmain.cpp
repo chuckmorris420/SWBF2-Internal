@@ -1,4 +1,5 @@
 #include "includes.h"
+#include "utils/settings.h"
 
 unsigned long __stdcall onAttach(LPVOID lpParam) {
 #ifdef _DEBUG
@@ -32,6 +33,9 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         globals::mainModule = hModule;
         globals::mainWindow = (HWND)FindWindowA(0, "STAR WARS Battlefront II");
         CreateThread(0, 0, (LPTHREAD_START_ROUTINE)onAttach, hModule, 0, 0);
+
+        cfg::refresh(); // Ensure configs are listed and Default.json exists
+        cfg::load("Default"); // Auto-load Default config
 
     case DLL_PROCESS_DETACH:
         kiero::shutdown();
