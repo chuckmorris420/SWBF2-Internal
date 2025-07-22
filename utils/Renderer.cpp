@@ -11,8 +11,6 @@ namespace Renderer
 
 	uint32_t yellowColor = 0xffffff00;
 	uint32_t orangeColor = 0xffff6a00;
-	uint32_t purpleColor = 0xff600DCD;
-	uint32_t pinkColor = 0xffCD0DC6;
 	uint32_t redColor = 0xffff1f1f;
 	uint32_t blueColor = 0xff7ea6ff;
 	uint32_t greenColor = 0xff0c9d00;
@@ -74,25 +72,27 @@ namespace Renderer
 			if (!IsValidPtr(PlayerSoldierPrediction)) continue;
 
 			uint32_t* Chosencolor;
+			uint32_t occludedColor = ImColorToU32(settings::ESP::enemyOccludedColor);
+			uint32_t visibleColor = ImColorToU32(settings::ESP::enemyVisibleColor);
+			uint32_t heroOccludedColor = ImColorToU32(settings::ESP::heroOccludedColor);
+			uint32_t heroVisibleColor = ImColorToU32(settings::ESP::heroVisibleColor);
+			uint32_t extraUnitOccludedColor = ImColorToU32(settings::ESP::extraUnitOccludedColor);
+			uint32_t extraUnitVisibleColor = ImColorToU32(settings::ESP::extraUnitVisibleColor);
+
 			if (pPlayer->team == pLocalPlayer->team) { Chosencolor = &blueColor; }
 			else
 			{
 				if (pSoldier->clientSolderHealthComponent->m_flMaxHealth > 549 && settings::ESP::heroCheck)
 				{
-					pSoldier->occluded ? Chosencolor = &purpleColor : Chosencolor = &pinkColor;
+					pSoldier->occluded ? Chosencolor = &heroOccludedColor : Chosencolor = &heroVisibleColor;
 				}
 				else if (pSoldier->clientSolderHealthComponent->m_flMaxHealth > 200 && settings::ESP::extraUnitCheck)
 				{
-					pSoldier->occluded ? Chosencolor = &orangeColor : Chosencolor = &yellowColor;
+					pSoldier->occluded ? Chosencolor = &extraUnitOccludedColor : Chosencolor = &extraUnitVisibleColor;
 				}
 				else
 				{
-					uint32_t occludedColor = ImColorToU32(settings::ESP::enemyOccludedColor);
-					uint32_t visibleColor = ImColorToU32(settings::ESP::enemyVisibleColor);
-
-					pSoldier->occluded
-						? Chosencolor = &occludedColor
-						: Chosencolor = &visibleColor;
+					pSoldier->occluded ? Chosencolor = &occludedColor : Chosencolor = &visibleColor;
 				}
 			}
 
@@ -328,8 +328,5 @@ namespace Renderer
 
 		window->DrawList->AddImageRounded(pTexture, from, to, { 0.0f, 0.0f }, { 1.0f, 1.0f }, ImGui::GetColorU32({ r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f }), rounding, roundingCornersFlags);
 	}
-	
-
-
 }
 

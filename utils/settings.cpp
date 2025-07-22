@@ -94,9 +94,14 @@ namespace cfg
             try_val(j, "ESP_extraUnitCheck", settings::ESP::extraUnitCheck);
             try_val(j, "ESP_heroCheck", settings::ESP::heroCheck);
             try_val(j, "ESP_fairfightScreenshot", settings::ESP::fairfightScreenshot);
-
+			// ESP Colors
             try_color(j, "ESP_enemyVisibleColor", settings::ESP::enemyVisibleColor);
             try_color(j, "ESP_enemyOccludedColor", settings::ESP::enemyOccludedColor);
+            try_color(j, "ESP_heroVisibleColor", settings::ESP::heroVisibleColor);
+            try_color(j, "ESP_heroOccludedColor", settings::ESP::heroOccludedColor);
+            try_color(j, "ESP_extraUnitVisibleColor", settings::ESP::extraUnitVisibleColor);
+            try_color(j, "ESP_extraUnitOccludedColor", settings::ESP::extraUnitOccludedColor);
+
 
             cfg::refresh();
         } catch (const std::exception& e) {
@@ -135,6 +140,30 @@ namespace cfg
                 (int)(settings::ESP::enemyOccludedColor.Value.y * 255.0f),
                 (int)(settings::ESP::enemyOccludedColor.Value.z * 255.0f),
                 (int)(settings::ESP::enemyOccludedColor.Value.w * 255.0f)
+            }},
+            {"ESP_heroVisibleColor", {
+                (int)(settings::ESP::heroVisibleColor.Value.x * 255.0f),
+                (int)(settings::ESP::heroVisibleColor.Value.y * 255.0f),
+                (int)(settings::ESP::heroVisibleColor.Value.z * 255.0f),
+                (int)(settings::ESP::heroVisibleColor.Value.w * 255.0f)
+            }},
+            {"ESP_heroOccludedColor", {
+                (int)(settings::ESP::heroOccludedColor.Value.x * 255.0f),
+                (int)(settings::ESP::heroOccludedColor.Value.y * 255.0f),
+                (int)(settings::ESP::heroOccludedColor.Value.z * 255.0f),
+                (int)(settings::ESP::heroOccludedColor.Value.w * 255.0f)
+            }},
+            {"ESP_extraUnitVisibleColor", {
+                (int)(settings::ESP::extraUnitVisibleColor.Value.x * 255.0f),
+                (int)(settings::ESP::extraUnitVisibleColor.Value.y * 255.0f),
+                (int)(settings::ESP::extraUnitVisibleColor.Value.z * 255.0f),
+                (int)(settings::ESP::extraUnitVisibleColor.Value.w * 255.0f)
+            }},
+            {"ESP_extraUnitOccludedColor", {
+                (int)(settings::ESP::extraUnitOccludedColor.Value.x * 255.0f),
+                (int)(settings::ESP::extraUnitOccludedColor.Value.y * 255.0f),
+                (int)(settings::ESP::extraUnitOccludedColor.Value.z * 255.0f),
+                (int)(settings::ESP::extraUnitOccludedColor.Value.w * 255.0f)
             }}
         };
 

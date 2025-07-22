@@ -14,6 +14,11 @@ namespace settings
 		inline static bool fairfightScreenshot = true;
 		inline static ImColor enemyOccludedColor = ImColor(255, 31, 31, 255);      // Default: red
 		inline static ImColor enemyVisibleColor = ImColor(12, 157, 0, 255);        // Default: green
+		inline static ImColor extraUnitOccludedColor = ImColor(255, 106, 0, 255);  // Default: orange
+		inline static ImColor extraUnitVisibleColor = ImColor(255, 255, 0, 255);   // Default: yellow
+		inline static ImColor heroOccludedColor = ImColor(96, 13, 205, 255);       // Default: purple
+		inline static ImColor heroVisibleColor = ImColor(205, 13, 198, 255);       // Default: pink
+
 	};
 
 }

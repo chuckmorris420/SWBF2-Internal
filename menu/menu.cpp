@@ -103,11 +103,19 @@ namespace menu {
 				if (ImGui::BeginTabItem("Colours"))
 				{
 					ImGui::Text("Basic Enemy:");
-					ImGui::ColorEdit4("Visible", (float*)&settings::ESP::enemyVisibleColor, ImGuiColorEditFlags_NoInputs);
+					ImGui::ColorEdit4("Visible##Enemy", (float*)&settings::ESP::enemyVisibleColor, ImGuiColorEditFlags_NoInputs);
 					ImGui::SameLine();
-					ImGui::ColorEdit4("Occluded", (float*)&settings::ESP::enemyOccludedColor, ImGuiColorEditFlags_NoInputs);
+					ImGui::ColorEdit4("Occluded##Enemy", (float*)&settings::ESP::enemyOccludedColor, ImGuiColorEditFlags_NoInputs);
 					
 					ImGui::Text("Hero/Villian:");
+					ImGui::ColorEdit4("Visible##Hero", (float*)&settings::ESP::heroVisibleColor, ImGuiColorEditFlags_NoInputs);
+					ImGui::SameLine();
+					ImGui::ColorEdit4("Occluded##Hero", (float*)&settings::ESP::heroOccludedColor, ImGuiColorEditFlags_NoInputs);
+
+					ImGui::Text("Ariel/Enforcer/Infiltrator:");
+					ImGui::ColorEdit4("Visible##ExtraUnit", (float*)&settings::ESP::extraUnitVisibleColor, ImGuiColorEditFlags_NoInputs);
+					ImGui::SameLine();
+					ImGui::ColorEdit4("Occluded##ExtraUnit", (float*)&settings::ESP::extraUnitOccludedColor, ImGuiColorEditFlags_NoInputs);
 
 
 					ImGui::EndTabItem();
@@ -133,7 +141,10 @@ namespace menu {
 					ImGui::InputTextWithHint("##input)text", "Config Name", buffer, sizeof(buffer));
 					ImGui::PopItemWidth();
 
-					if (ImGui::Button("Load", ImVec2(ImGui::GetContentRegionAvail().x / 4, 24.0f)))
+					float smallButtonWidth = 40.0f;
+					float largeButtonWidth = 70.0f;
+
+					if (ImGui::Button("Load", ImVec2(smallButtonWidth, 24.0f)))
 					{
 						if (strlen(buffer) > 1)
 							cfg::load(buffer);
@@ -141,7 +152,7 @@ namespace menu {
 							cfg::load(cfg::list[cfg::currCfg]);
 					}
 					ImGui::SameLine(0, 1);
-					if (ImGui::Button("Save", ImVec2(ImGui::GetContentRegionAvail().x / 3, 24.0f)))
+					if (ImGui::Button("Save", ImVec2(smallButtonWidth, 24.0f)))
 					{
 						if (strlen(buffer) > 1)
 							cfg::save(buffer);
@@ -149,7 +160,7 @@ namespace menu {
 							cfg::save(cfg::list[cfg::currCfg]);
 					}
 					ImGui::SameLine(0, 1);
-					if (ImGui::Button("Delete", ImVec2(ImGui::GetContentRegionAvail().x / 2, 24.0f)))
+					if (ImGui::Button("Delete", ImVec2(largeButtonWidth, 24.0f)))
 					{
 						if (strlen(buffer) > 1)
 							cfg::remove(buffer);
@@ -157,7 +168,7 @@ namespace menu {
 							cfg::remove(cfg::list[cfg::currCfg]);
 					}
 					ImGui::SameLine(0, 1);
-					if (ImGui::Button("Refresh", ImVec2(ImGui::GetContentRegionAvail().x / 1, 24.0f)))
+					if (ImGui::Button("Refresh", ImVec2(largeButtonWidth, 24.0f)))
 					{
 						cfg::refresh();
 					}
