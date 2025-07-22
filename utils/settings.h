@@ -11,7 +11,7 @@ namespace settings
 		inline static bool dot = false;
 		inline static bool extraUnitCheck = true;
 		inline static bool heroCheck = true;
-		inline static bool fairfightScreenshot = true;
+		inline static bool fairfightScreenshot = false;
 		inline static ImColor enemyOccludedColor = ImColor(255, 31, 31, 255);      // Default: red
 		inline static ImColor enemyVisibleColor = ImColor(12, 157, 0, 255);        // Default: green
 		inline static ImColor extraUnitOccludedColor = ImColor(255, 106, 0, 255);  // Default: orange

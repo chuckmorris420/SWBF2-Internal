@@ -170,7 +170,10 @@ namespace Renderer
 					if (pPlayer->team != pLocalPlayer->team && settings::ESP::dot)
 					{
 						float factor = (heightoffset / 5);
-						RenderCircle(ImVec2(head.x, head.y + 6 + factor), 5, *Chosencolor, 1, 16);
+						float dotRadius = heightoffset / 6.0f;
+						if (dotRadius < 2.0f) dotRadius = 2.0f;
+						if (dotRadius > 10.0f) dotRadius = 10.0f;
+						RenderCircle(ImVec2(head.x, head.y + 6 + factor), dotRadius, *Chosencolor, 1, 16);
 					}
 
 				}

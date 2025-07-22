@@ -9,7 +9,7 @@ namespace menu {
 	void init() {
 		static bool no_titlebar = false;
 		static bool no_border = false;
-		static bool no_resize = false;
+		static bool no_resize = true;
 		static bool auto_resize = true;
 		static bool no_move = false;
 		static bool no_scrollbar = false;
@@ -83,7 +83,7 @@ namespace menu {
 		if (isOpen)
 		{
 			ImGui::Begin("Master Keef's SWBF2 ESP", &isOpen, window_flags);
-			ImGui::Text("BACKSPACE to open/close menu.");
+			ImGui::Text("'=/+' key to open/close menu.");
 			
 			if (ImGui::BeginTabBar("Tabs"))
 			{
@@ -106,12 +106,12 @@ namespace menu {
 					ImGui::ColorEdit4("Visible##Enemy", (float*)&settings::ESP::enemyVisibleColor, ImGuiColorEditFlags_NoInputs);
 					ImGui::SameLine();
 					ImGui::ColorEdit4("Occluded##Enemy", (float*)&settings::ESP::enemyOccludedColor, ImGuiColorEditFlags_NoInputs);
-					
+					ImGui::Separator();
 					ImGui::Text("Hero/Villian:");
 					ImGui::ColorEdit4("Visible##Hero", (float*)&settings::ESP::heroVisibleColor, ImGuiColorEditFlags_NoInputs);
 					ImGui::SameLine();
 					ImGui::ColorEdit4("Occluded##Hero", (float*)&settings::ESP::heroOccludedColor, ImGuiColorEditFlags_NoInputs);
-
+					ImGui::Separator();
 					ImGui::Text("Ariel/Enforcer/Infiltrator:");
 					ImGui::ColorEdit4("Visible##ExtraUnit", (float*)&settings::ESP::extraUnitVisibleColor, ImGuiColorEditFlags_NoInputs);
 					ImGui::SameLine();
@@ -142,7 +142,7 @@ namespace menu {
 					ImGui::PopItemWidth();
 
 					float smallButtonWidth = 40.0f;
-					float largeButtonWidth = 70.0f;
+					float largeButtonWidth = 80.0f;
 
 					if (ImGui::Button("Load", ImVec2(smallButtonWidth, 24.0f)))
 					{
