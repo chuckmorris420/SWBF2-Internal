@@ -10,7 +10,7 @@ namespace Renderer
 	bool isPlayerVisible = false;
 
 	uint32_t yellowColor = 0xffffff00;
-	uint32_t orangeColor = 0xffCD4D0D;
+	uint32_t orangeColor = 0xffff6a00;
 	uint32_t purpleColor = 0xff600DCD;
 	uint32_t pinkColor = 0xffCD0DC6;
 	uint32_t redColor = 0xffff1f1f;
@@ -77,7 +77,7 @@ namespace Renderer
 			if (pPlayer->team == pLocalPlayer->team) { Chosencolor = &blueColor; }
 			else
 			{
-				if (pSoldier->clientSolderHealthComponent->m_flMaxHealth > 549)
+				if (pSoldier->clientSolderHealthComponent->m_flMaxHealth > 549 && settings::ESP::heroCheck)
 				{
 					pSoldier->occluded ? Chosencolor = &purpleColor : Chosencolor = &pinkColor;
 				}
@@ -175,11 +175,11 @@ namespace Renderer
 
 		// Show screenshot notice if needed
         if (globals::showScreenshotNotice && globals::canDraw) {
-            RenderText("Screenshot taken by FairFight", ImVec2(5, 5), 14.0f, 0xffffff00, false);
+            RenderText("Screenshot taken by FairFight", ImVec2(5, 5), 20.0f, 0xffffff00, false);
 
-            // Check if 5 seconds have passed
+			// Remove after time has passed
             auto now = std::chrono::steady_clock::now();
-            if (std::chrono::duration_cast<std::chrono::seconds>(now - globals::lastScreenshotTime).count() >= 60) {
+            if (std::chrono::duration_cast<std::chrono::seconds>(now - globals::lastScreenshotTime).count() >= 30) {
                 globals::showScreenshotNotice = false;
             }
         }
