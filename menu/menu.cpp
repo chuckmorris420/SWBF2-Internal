@@ -25,7 +25,7 @@ namespace menu {
 		style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.60f, 0.60f, 0.60f, 1.00f);
 		style.Colors[ImGuiCol_WindowBg] = ImVec4(0.15f, 0.09f, 0.09f, 1.00f);
 		style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-		style.Colors[ImGuiCol_PopupBg] = ImVec4(0.05f, 0.05f, 0.10f, 0.85f);
+		style.Colors[ImGuiCol_PopupBg] = ImVec4(0.15f, 0.09f, 0.09f, 1.00f);
 		style.Colors[ImGuiCol_Border] = ImVec4(0.70f, 0.70f, 0.70f, 0.65f);
 		style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
 		style.Colors[ImGuiCol_FrameBg] = ImVec4(0.00f, 0.00f, 0.01f, 1.00f);
@@ -40,12 +40,6 @@ namespace menu {
 		style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.56f, 0.56f, 0.56f, 0.91f);
 		style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.70f, 0.70f, 0.70f, 0.62f);
 		style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.30f, 0.30f, 0.30f, 0.84f);
-		style.Colors[ImGuiCol_Button] = ImVec4(0.48f, 0.72f, 0.89f, 0.49f);
-		style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.50f, 0.69f, 0.99f, 0.68f);
-		style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.80f, 0.50f, 0.50f, 1.00f);
-		style.Colors[ImGuiCol_Header] = ImVec4(0.30f, 0.69f, 1.00f, 0.53f);
-		style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.44f, 0.61f, 0.86f, 1.00f);
-		style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.38f, 0.62f, 0.83f, 1.00f);
 		style.Colors[ImGuiCol_Separator] = ImVec4(0.50f, 0.50f, 0.50f, 1.00f);
 		style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.70f, 0.60f, 0.60f, 1.00f);
 		style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.90f, 0.70f, 0.70f, 1.00f);
@@ -66,6 +60,12 @@ namespace menu {
 		style.Colors[ImGuiCol_TabHovered] = ImVec4(0.8f, 0.4f, 0.4f, 0.8f);
 		style.Colors[ImGuiCol_TabActive] = ImVec4(0.7f, 0.07f, 0.07f, 1.00f);
 		style.Colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.6f, 0.17f, 0.17f, 1.00f);
+		style.Colors[ImGuiCol_Button]        = ImVec4(0.5f, 0.02f, 0.02f, 1.00f);
+		style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.8f, 0.4f, 0.4f, 0.8f);
+		style.Colors[ImGuiCol_ButtonActive]  = ImVec4(0.7f, 0.07f, 0.07f, 1.00f);
+		style.Colors[ImGuiCol_Header]        = ImVec4(0.5f, 0.02f, 0.02f, 1.00f);
+		style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.8f, 0.4f, 0.4f, 0.8f);
+		style.Colors[ImGuiCol_HeaderActive]  = ImVec4(0.7f, 0.07f, 0.07f, 1.00f);
 
 		ImGuiWindowFlags	window_flags = 0;
 		if (no_titlebar)	window_flags |= ImGuiWindowFlags_NoTitleBar;
@@ -90,11 +90,22 @@ namespace menu {
 				if (ImGui::BeginTabItem("Visuals"))
 				{
 					ImGui::Checkbox("Enable ESP", &settings::ESP::enabled);
-					ImGui::Checkbox("Enemy Box", &settings::ESP::enemy);
-					ImGui::Checkbox("Enemy Name", &settings::ESP::name);
-					ImGui::Checkbox("Enemy Health", &settings::ESP::health);
-					//ImGui::Checkbox("Show Distance", &Config::ESP::distance);
-					ImGui::Checkbox("Enemy Dot", &settings::ESP::dot);
+					ImGui::Checkbox("Box ESP", &settings::ESP::enemy);
+					ImGui::SameLine();
+					ImGui::Dummy(ImVec2(30, 0)); // 80 pixels of horizontal space, adjust as needed
+					ImGui::SameLine();
+
+					const char* boxTypes[] = { "Full", "Corners" };
+					static int boxTypeIdx = settings::ESP::cornerBox ? 1 : 0;
+					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+					if (ImGui::Combo("##BoxType", &boxTypeIdx, boxTypes, IM_ARRAYSIZE(boxTypes))) {
+						settings::ESP::cornerBox = (boxTypeIdx == 1);
+					}
+					ImGui::Checkbox("Name", &settings::ESP::name);
+					ImGui::Checkbox("Health Bar", &settings::ESP::health);
+					ImGui::Checkbox("Health Number", &settings::ESP::healthNumber);
+					ImGui::Checkbox("Distance", &settings::ESP::distance);
+					ImGui::Checkbox("Dot", &settings::ESP::dot);
 					ImGui::Checkbox("Flag Hero/Villian", &settings::ESP::heroCheck);
 					ImGui::Checkbox("Flag Ariel/Enforcer/Infiltrator", &settings::ESP::extraUnitCheck);
 					ImGui::Checkbox("Fairfight Screenshot Notification", &settings::ESP::fairfightScreenshot);

@@ -6,8 +6,11 @@ namespace settings
 	{
 		inline static bool enabled = true;
 		inline static bool enemy = true;
+		inline static bool cornerBox = false;
 		inline static bool name = true;
 		inline static bool health = true;
+		inline static bool healthNumber = true;
+		inline static bool distance = true;
 		inline static bool dot = false;
 		inline static bool extraUnitCheck = true;
 		inline static bool heroCheck = true;

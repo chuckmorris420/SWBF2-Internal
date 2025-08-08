@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <iostream>
 #include <sstream>      // std::stringstream
-
+#include <algorithm>
 #include <DirectXMath.h>
 
 #include <d3d11.h>

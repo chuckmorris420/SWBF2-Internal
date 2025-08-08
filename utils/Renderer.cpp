@@ -8,7 +8,7 @@ namespace Renderer
 
 	RenderView* pRenderer;
 	bool isPlayerVisible = false;
-
+	bool canDrawDistance = true;
 	uint32_t yellowColor = 0xffffff00;
 	uint32_t orangeColor = 0xffff6a00;
 	uint32_t redColor = 0xffff1f1f;
@@ -16,15 +16,26 @@ namespace Renderer
 	uint32_t greenColor = 0xff0c9d00;
 	uint32_t blackColor = 0xff000000;
 
+	// Declare and initialize 'head' and 'foot' globally with default values
+	DirectX::XMFLOAT3 head = { 0.0f, 0.0f, 0.0f };
+	DirectX::XMFLOAT3 foot = { 0.0f, 0.0f, 0.0f };
+
+	// Box corners
+	float boxLeft = head.x - 0.0f; // Use a default value for 'factor'
+	float boxRight = head.x + 0.0f; // Use a default value for 'factor'
+	float boxTop = head.y;
+	float boxBottom = foot.y;
+
 	void Initialize()
 	{
 		std::cout << "Init renderer" << std::endl;
-		// Shitty stuff
 		ImGuiIO& io = ImGui::GetIO();
 
-		// TODO ? custom font
-		io.Fonts->AddFontDefault();
-		m_pFont = io.Fonts->AddFontDefault();
+		m_pFont = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/segoeuib.ttf", 18.0f);
+		if (!m_pFont) {
+			m_pFont = io.Fonts->AddFontDefault();
+			std::cout << "Failed to load Arial, using default font." << std::endl;
+		}
 	}
 
 	void BeginScene()
@@ -42,13 +53,13 @@ namespace Renderer
 
 	void DrawScene()
 	{
-		// Color example: 0xfff54266
 
 		if (!IsValidPtr(pRenderView)) return ;
 
 		if (!IsValidPtr(pLocalPlayer)) return ;
 
 		if (!IsValidPtr(pNameClass)) return;
+
 
 		for (auto pPlayer : pClientArray->clients)
 		{
@@ -66,7 +77,14 @@ namespace Renderer
 			if (pSoldier->clientSolderHealthComponent->health <= 0) continue;
 
 			ClientSoldierPrediction* LocalSoldierPrediction = pLocalSoldier->clientSoldierPrediction;
-			if (!IsValidPtr(LocalSoldierPrediction)) continue;
+			if (!IsValidPtr(LocalSoldierPrediction))
+			{
+				canDrawDistance = false;
+			}
+			else
+			{
+				canDrawDistance = true;
+			}
 
 			ClientSoldierPrediction* PlayerSoldierPrediction = pSoldier->clientSoldierPrediction;
 			if (!IsValidPtr(PlayerSoldierPrediction)) continue;
@@ -107,25 +125,69 @@ namespace Renderer
 				if (settings::ESP::enabled) {
 					if (pPlayer->team != pLocalPlayer->team && settings::ESP::enemy)
 					{
-						float factor = (heightoffset / 5);
+						// Calculate player distance for box style selection
+						float playerDistance = 0.0f;
+						bool canDrawCornerBox = true;
 
+						if (IsValidPtr(LocalSoldierPrediction))
+						{
+							playerDistance = utils::DistanceVec3(LocalSoldierPrediction->pos, PlayerSoldierPrediction->pos);
+						}
+						else
+						{
+							canDrawCornerBox = false;
+						}
+
+						float factor = (heightoffset / 5);
 						DirectX::XMFLOAT3 m2 = DirectX::XMFLOAT3(head.x - factor, head.y, 0);
 						DirectX::XMFLOAT3 m1 = DirectX::XMFLOAT3(head.x + factor, head.y, 0);
 						DirectX::XMFLOAT3 m3 = DirectX::XMFLOAT3(foot.x - factor, foot.y, 0);
 						DirectX::XMFLOAT3 m4 = DirectX::XMFLOAT3(foot.x + factor, foot.y, 0);
 
+						const float cornerLen = 10.0f;
+						
 
-						RenderLine(ImVec2(m1.x, m1.y), ImVec2(m2.x, m2.y), *Chosencolor, 2);
-						RenderLine(ImVec2(m2.x, m2.y), ImVec2(m3.x, m3.y), *Chosencolor, 2);
-						RenderLine(ImVec2(m3.x, m3.y), ImVec2(m4.x, m4.y), *Chosencolor, 2);
-						RenderLine(ImVec2(m4.x, m4.y), ImVec2(m1.x, m1.y), *Chosencolor, 2);
+						if (playerDistance > 70.0f || !settings::ESP::cornerBox || !canDrawCornerBox)
+						{
+							// Full Box ESP
+							RenderLine(ImVec2(m1.x, m1.y), ImVec2(m2.x, m2.y), *Chosencolor, 2);
+							RenderLine(ImVec2(m2.x, m2.y), ImVec2(m3.x, m3.y), *Chosencolor, 2);
+							RenderLine(ImVec2(m3.x, m3.y), ImVec2(m4.x, m4.y), *Chosencolor, 2);
+							RenderLine(ImVec2(m4.x, m4.y), ImVec2(m1.x, m1.y), *Chosencolor, 2);
+						}
+						else
+						{
+							RenderLine(ImVec2(m2.x, m2.y), ImVec2(m2.x + cornerLen, m2.y), *Chosencolor, 2);
+							RenderLine(ImVec2(m2.x, m2.y), ImVec2(m2.x, m2.y + cornerLen), *Chosencolor, 2);
+							RenderLine(ImVec2(m1.x, m1.y), ImVec2(m1.x - cornerLen, m1.y), *Chosencolor, 2);
+							RenderLine(ImVec2(m1.x, m1.y), ImVec2(m1.x, m1.y + cornerLen), *Chosencolor, 2);
+							RenderLine(ImVec2(m3.x, m3.y), ImVec2(m3.x + cornerLen, m3.y), *Chosencolor, 2);
+							RenderLine(ImVec2(m3.x, m3.y), ImVec2(m3.x, m3.y - cornerLen), *Chosencolor, 2);
+							RenderLine(ImVec2(m4.x, m4.y), ImVec2(m4.x - cornerLen, m4.y), *Chosencolor, 2);
+							RenderLine(ImVec2(m4.x, m4.y), ImVec2(m4.x, m4.y - cornerLen), *Chosencolor, 2);
+						}
 					}
+
+					// HP number rendering (replace the old boxCenterY/m4 usage)
+					if (pPlayer->team != pLocalPlayer->team && settings::ESP::healthNumber)
+					{
+						const float hpPaddingX = 8.0f;
+						int hpValue = static_cast<int>(pSoldier->clientSolderHealthComponent->health);
+						std::string hpText = std::to_string(hpValue) + " HP";
+						float factor = (heightoffset / 5);
+
+						float hpY = (head.y + foot.y) / 2.0f;
+						float hpX = foot.x + factor + hpPaddingX;
+
+						RenderText(hpText, ImVec2(hpX, hpY), 13.0f, *Chosencolor, false);
+					}
+					
 
 					std::wstring name;
 					std::string espName;
 					if (pPlayer->team != pLocalPlayer->team && settings::ESP::name)
 					{
-						int fontsize = 12;
+						int fontsize = 14;
 						try {
 							std::wstring tmpname = std::wstring(&pPlayer->NameClass->name[0], &pPlayer->NameClass->name[20]);
 							auto czech = wcstok(&tmpname[0], L" ");
@@ -137,7 +199,8 @@ namespace Renderer
 						espName.resize(name.length());
 						wcstombs_s(&size, &espName[0], espName.size() + 1, name.c_str(), name.size());
 
-						RenderText(espName, ImVec2(head.x, (head.y - 6) - (heightoffset / 4)), fontsize, *Chosencolor, true);
+						float nameYOffset = 12.0f + (heightoffset / 10.0f);
+						RenderText(espName, ImVec2(head.x, head.y - nameYOffset), fontsize, *Chosencolor, true);
 
 					}
 
@@ -176,16 +239,28 @@ namespace Renderer
 						RenderCircle(ImVec2(head.x, head.y + 6 + factor), dotRadius, *Chosencolor, 1, 16);
 					}
 
+					if (pPlayer->team != pLocalPlayer->team && settings::ESP::distance && canDrawDistance)
+					{
+						float distance = utils::DistanceVec3(LocalSoldierPrediction->pos, PlayerSoldierPrediction->pos);
+
+						if (distance < 0.0f)
+						{
+							canDrawDistance = false;	
+						}
+
+						std::string distanceText = std::to_string(static_cast<int>(distance)) + "m";
+						RenderText(distanceText, ImVec2(foot.x, foot.y + 1 + (heightoffset / 12)), 14.0f, *Chosencolor, true);
+					}
+
+
 				}
 
 			}
 		}
 
-		// Show screenshot notice if needed
         if (globals::showScreenshotNotice && globals::canDraw && settings::ESP::fairfightScreenshot) {
             RenderText("Screenshot taken by FairFight", ImVec2(5, 5), 20.0f, 0xffffff00, false);
 
-			// Remove after time has passed
             auto now = std::chrono::steady_clock::now();
             if (std::chrono::duration_cast<std::chrono::seconds>(now - globals::lastScreenshotTime).count() >= 20) {
                 globals::showScreenshotNotice = false;

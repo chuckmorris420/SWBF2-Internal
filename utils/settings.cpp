@@ -88,8 +88,11 @@ namespace cfg
             // ESP Settings
             try_val(j, "ESP_enabled", settings::ESP::enabled);
             try_val(j, "ESP_enemy", settings::ESP::enemy);
+            try_val(j, "ESP_cornerBox", settings::ESP::cornerBox);
             try_val(j, "ESP_name", settings::ESP::name);
             try_val(j, "ESP_health", settings::ESP::health);
+            try_val(j, "ESP_healthNumber", settings::ESP::healthNumber);
+			try_val(j, "ESP_distance", settings::ESP::distance);
             try_val(j, "ESP_dot", settings::ESP::dot);
             try_val(j, "ESP_extraUnitCheck", settings::ESP::extraUnitCheck);
             try_val(j, "ESP_heroCheck", settings::ESP::heroCheck);
@@ -123,8 +126,11 @@ namespace cfg
         {
             {"ESP_enabled", settings::ESP::enabled},
             {"ESP_enemy", settings::ESP::enemy},
+            {"ESP_cornerBox", settings::ESP::cornerBox},
             {"ESP_name", settings::ESP::name},
             {"ESP_health", settings::ESP::health},
+            {"ESP_healthNumber", settings::ESP::healthNumber},
+			{"ESP_distance", settings::ESP::distance},
             {"ESP_dot", settings::ESP::dot},
             {"ESP_extraUnitCheck", settings::ESP::extraUnitCheck},
             {"ESP_heroCheck", settings::ESP::heroCheck},

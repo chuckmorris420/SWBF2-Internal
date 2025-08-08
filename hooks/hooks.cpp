@@ -35,11 +35,11 @@ namespace hooks {
 		bool hkBitBlt(const HDC hdc, const int x, const int y, const int cx, const int cy, const HDC hdcSrc, const int x1, const int y1, const DWORD rop)
 		{
 			globals::canDraw = false;
-			Sleep(5); // just in case...
+			Sleep(10); // just in case...
 			auto result = oBitBlt(hdc, x, y, cx, cy, hdcSrc, x1, y1, rop);
 			globals::canDraw = true;
 			globals::showScreenshotNotice = true;
-			globals::lastScreenshotTime = std::chrono::steady_clock::now(); // Set the time
+			globals::lastScreenshotTime = std::chrono::steady_clock::now();
 			std::cout << "Screenshot taken by FairFight." << std::endl;
 
 			return result;
