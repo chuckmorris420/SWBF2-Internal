@@ -21,10 +21,13 @@ Recommend disabling origin in-game overlay as it can cause input lag:
 - Screenshot Cleaner (With notification when taken)
 
 ## Screenshots:
-![image](https://github.com/user-attachments/assets/2a146489-9abb-49fa-97a2-ea1a6c48cd42)
+![image](https://i.imgur.com/7dkeqfq.png)
 
-![image](https://github.com/user-attachments/assets/6acd807f-c905-497d-a327-3086d97ad46c)
+![image](https://i.imgur.com/NkNu27m.png)
 
 ## Menu:
-![image](https://github.com/user-attachments/assets/bab33db4-1ac3-4f57-b466-ac103e43e08c)
+![image](https://i.imgur.com/R6tsi4z.png)
 
+![image](https://i.imgur.com/jcQJhlQ.png)
+
+![image](https://i.imgur.com/ng6WLB4.png)
